@@ -22,7 +22,7 @@ The goal is to decide which memory placement policy is best for a given data obj
 # Step 1. Collect Baseline Metrics for Kernel and Object Level Features
 
 
-## How to collect kernel level metrics (baseline experiment)
+## Step 1.1 collect kernel level metrics (baseline experiment)
 
 Kernel level feature vector: f(K1) = < f1, f2… fn,> (K1)  
 * e.g.  <input size, cycles (8991), duration (3520, nsecond), mem % (9.27, %)>
@@ -144,7 +144,7 @@ cfd,097K,24,cuda_compute_flux,843878389.48,35.20,48646,1245065564.23,35.20,38944
 cfd,097K,25,cuda_time_step,811314363.14,68.97,14232,1202376919.60,68.97,11808,22.41,11712.08,5.42,14.26,192,506,22,0,0,0,97152,0.63,32,14,32,10,33.72,52.68,60,93.75
 ```
 
-## Now, collect data object level features: 
+## Step 1.2: collect data object level features: 
 Data object level features contain information about page faults on CPU and GPU, as well as data movement between host and device.
 
 Assuming two objects, we should have the following feature vectors: 
@@ -240,7 +240,7 @@ Notes for the columns
 # Step 3. Label the training data
 This step labels rows in the training dataset with an optimal policy choice.  
 
-## Generate kernel-based run for all variants
+## step 3.1: Generate kernel-based run for all variants
 * ./rodinia_3.1/cuda/cfd/run_variants.sh
 
 ./rodinia_3.1/cuda/cfd$ nohup ./run_variants-v2.sh &
@@ -249,7 +249,7 @@ Output sample:
 * ./rodinia_3.1/cuda/cfd/ip-128-115-246-7-kernel-level-measurement/variants 
 There should be 7*7*7*3 = 1029 log files :up to 3 objects, each 7 variants, 3 input data sizes for cfd
 
-## PostProcessing to find the best performing ones
+## step 3.2: PostProcessing to find the best performing ones
 Post-process script:
 *./scripts/extractData.py
 
@@ -287,7 +287,7 @@ cuda_time_step,193K,5,4,5,545,1.43,101.3333,6000,0.016888,0.015776,0.02003199999
 cuda_time_step,missile0.2M,0,6,6,66,20.62,120.6156,6000,0.020102000000000002,0.018847,0.022175999999999998
 ```
 
-## Applying Labels to feature vectors
+## Step 3.3: applying Labels to feature vectors
 This step adds one more column (indicating best memory placement policy) into the merged training datasets. 
 
 Add label into the merged feature vector
